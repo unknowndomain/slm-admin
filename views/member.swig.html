@@ -1,0 +1,69 @@
+{% extends '../../../views/base.swig.html' %}
+{% block content %}
+<h2>Member: {{ member.name }}</h2>
+<form method="POST" role="form">
+    <input type="hidden" name="_csrf" value="{{ token }}" />
+    <div class="form-group">
+        <label for="name">Name</label>
+        <input type="text" name="name" id="name" value="{{ member.name }}" class="form-control">
+    </div>
+    <div class="form-group">
+        <label for="email">E-mail</label>
+        <p><b>Warning: If you change this they will have to be able to log in using that address in future.</b></p>
+        <input type="text" name="email" id="email" value="{{ member.email }}" class="form-control">
+    </div>
+    <div class="form-group">
+        <label for="address">Address</label>
+        <textarea name="address" id="address" class="form-control" rows="5">{{ member.address }}</textarea>
+    </div>
+    <div class="form-group">
+        <label for="card-id">Card ID</label>
+        <input type="text" name="card-id" id="card-id" value="{{ member.card_id|default('') }}" class="form-control">
+    </div>
+    <div class="form-group">
+        <label for="last_payment">Last payment</label>
+        {% if member.last_payment %}
+        <input type="text" name="last_payment" id="last_payment" value="{{ member.last_payment.toISOString() }}" class="form-control">
+        {% else %}
+        <input type="text" name="last_payment" id="last_payment" value="" placeholder="2014-01-20" class="form-control">
+        {% endif %}
+        <p>This date is one month before the date their account expires as the database records the day the member last payed not when it expires.</p>
+    </div>
+    <div class="form-group">
+        <label for="name">Permission Level</label>
+        <p>The number represents how much access a user has. 0 is no permission. 50 is considered an admin.</p>
+        <input type="number" name="permission" id="permission" value="{{ member.permission|default('0') }}" class="form-control">
+    </div>
+    <button>Update</button>
+</form>
+<h3>Recent Transactions</h3>
+<table>
+    <thead>
+        <tr>
+            <th>Description</th>
+            <th>Type</th>
+            <th>Value (£)</th>
+            <th>When</th>
+        </tr>
+    </thead>
+    <tbody>
+    {% for event in events %}
+        <tr>
+            {% if event.renumeration %}
+                {% if event.renumeration < 0 %}
+                <td><span class="glyphicon glyphicon-chevron-up"></span> {{ event.description }}</td>
+                {% else %}
+                <td><span class="glyphicon glyphicon-chevron-down"></span> {{ event.description }}</td>
+                {% endif %}
+            {% else %}
+            <td>{{ event.description }}</td>
+            {% endif %}
+            <td>{{ event.type }}</td>
+            <td>{{ event.renumeration }}</td>
+            <td><time datetime="{{ event.created.toISOString() }}">{{ event.created|date("d M Y") }} {{ event.created.toLocaleTimeString() }}</time></td>
+        </tr>
+    {% endfor %}
+    </tbody>
+</table>
+
+{% endblock %}

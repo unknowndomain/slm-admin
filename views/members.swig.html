@@ -1,0 +1,117 @@
+{% extends '../../../views/base.swig.html' %}
+{% block content %}
+<h2>Member List</h2>
+<label>Filter table: <input id="searchInput" placeholder="Filter on anything"></label>
+<table class="table table-striped" style="zoom: 70%">
+    <caption>List of all members</caption>
+    <thead>
+        <tr>
+            <th>Name</th>
+            <th>E-mail Addresses</th>
+            <th>Home Addresses</th>
+            <th>Card ID</th>
+            <th>Signed Up</th>
+            <th>Last Payment</th>
+            <th>Active</th>
+        </tr>
+    </thead>
+    <tbody>
+        {% for member in members %}
+        <tr>
+            <td><a href="/admin/member/{{ member.uuid }}">{{ member.name }}</a></td>
+            <td>{{ member.email }}</td>
+            <td><pre>{{ member.address }}</pre></td>
+            <td>{{ member.card_id|default('') }}</td>
+            <td><time datetime="{{ member.joined.toISOString() }}">{{ member.joined.toISOString() }}</time></td>
+            {% if member.last_payment %}
+            <td><time datetime="{{ member.last_payment.toISOString() }}">{{ member.last_payment.toISOString() }}</time></td>
+            {% else %}
+            <td>N/A</td>
+            {% endif %}
+            {% if member.is_active() %}
+            <td>Yes</td>
+            {% else %}
+            <td>No</td>
+            {% endif %}
+        </tr>
+        {% endfor %}
+    </tbody>
+    <tfoot>
+        <tr>
+            <td colspan="5">Total signed up members: {{ members_count }}</td>
+        </tr>
+    </tfoot>
+</table>
+{% endblock %}
+
+{% block js %}
+<script>
+$(document).ready(function () {
+    $("#searchInput").on("input", function () {
+        //split the current value of searchInput
+        var data = this.value.split(" ");
+        //create a jquery object of the rows
+        var jo = $("tbody").find("tr");
+        if (this.value == "") {
+            jo.show();
+            return;
+        }
+        //hide all the rows
+        jo.hide();
+
+        //Recusively filter the jquery object to get results.
+        jo.filter(function (i, v) {
+            var $t = $(this);
+            for (var d = 0; d < data.length; ++d) {
+                if ($t.is(":contains('" + data[d] + "')")) {
+                    return true;
+                }
+            }
+            return false;
+        })
+        //show the rows that match.
+        .show();
+    });
+});
+</script>
+<script src="https://login.persona.org/include.js"></script>
+<script>
+var login_button = document.querySelector("#persona-login");
+if (login_button) {
+  login_button.addEventListener("click", function() {
+        navigator.id.request();
+    }, false);
+}
+
+navigator.id.watch({
+  loggedInUser: {% if email %}'{{ email }}'{% else %}null{% endif %},
+  onlogin: function(assertion) {
+    var xhr = new XMLHttpRequest();
+    xhr.open("POST", "/auth/verify", true);
+    xhr.setRequestHeader("Content-Type", "application/json");
+    xhr.addEventListener("loadend", function(e) {
+      var data = JSON.parse(this.responseText);
+      if (data && data.status === "okay") {
+        console.log("You have been logged in as: " + data.email);
+        window.location.reload(true);
+      }
+    }, false);
+
+    xhr.send(JSON.stringify({
+      assertion: assertion
+    }));
+  },
+  onlogout: function() {
+    var xhr = new XMLHttpRequest();
+    xhr.open("POST", "/auth/logout", true);
+    xhr.addEventListener("loadend", function(e) {
+      console.log("User has logged out.");
+      window.location.reload(true);
+    });
+    xhr.send();
+  }
+});
+
+
+</script>
+{% endblock %}
