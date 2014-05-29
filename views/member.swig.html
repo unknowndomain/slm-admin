@@ -22,7 +22,11 @@
     </div>
     <div class="form-group">
         <label for="to_expire">To Expire</label>
-        <input type="text" name="to_expire" id="to_expire" value="{{ member.next_payment().toISOString()|default('') }}" placeholder="2014-01-20" class="form-control">
+        {% if member.next_payment() %}
+        <input type="text" name="to_expire" id="to_expire" value="{{ member.next_payment()|date('Y-m-d') }}" placeholder="2014-01-20" class="form-control">
+        {% else %}
+        <input type="text" name="to_expire" id="to_expire" value="" placeholder="2012-01-20" class="form-control">
+        {% endif %}
     </div>
     <div class="form-group">
         <label for="name">Permission Level</label>
