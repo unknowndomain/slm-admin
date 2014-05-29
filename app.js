@@ -15,7 +15,7 @@ module.exports = {
         app.get('/member/:uuid', function index (req, res) {
             var user = res.locals.user;
             if (user) {
-                if ((user.permissions >= 50) || (user.email == config.adminemail)) {
+                if ((user.permission >= 50) || (user.email == config.adminemail)) {
                     // get all members
                     res.locals.User.findOne({where: {uuid: req.params.uuid}},
                         function (err, member) {
