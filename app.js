@@ -85,9 +85,11 @@ module.exports = {
                         member.email = req.body.email;
                         member.address = req.body.address;
                         member.card_id = req.body.card_id;
-                        member.last_payment = Date.parse(req.body.last_payment);
+                        if (req.body.to_expire) {
+                            member.membership_expires = Date.parse(req.body.to_expire);
+                        }
                         member.permission = parseInt(req.body.permission);
-                
+                        
                         member.isValid(function (valid) {
                             if (valid) {
                                 member.save(function (err, member) {
