@@ -51,7 +51,7 @@ module.exports = {
         app.get('/', function index (req, res) {
             var user = res.locals.user;
             if (user) {
-                if ((user.permissions >= 50) || (user.email == config.adminemail)) {
+                if ((user.permission >= 50) || (user.email == config.adminemail)) {
                     // get all members
                     res.locals.User.all(function (err, members) {
                         if (!err) {
@@ -78,7 +78,7 @@ module.exports = {
             var user = res.locals.user;
 
             if (user) {
-                if ((user.permissions >= 50) || (user.email == config.adminemail)) {
+                if ((user.permission >= 50) || (user.email == config.adminemail)) {
                     // update member
                     res.locals.User.findOne({where: {uuid: req.params.uuid}}, function (err, member) {
                         member.name = req.body.name;
