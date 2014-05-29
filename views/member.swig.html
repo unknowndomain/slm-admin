@@ -21,13 +21,8 @@
         <input type="text" name="card-id" id="card-id" value="{{ member.card_id|default('') }}" class="form-control">
     </div>
     <div class="form-group">
-        <label for="last_payment">Last payment</label>
-        {% if member.last_payment %}
-        <input type="text" name="last_payment" id="last_payment" value="{{ member.last_payment.toISOString() }}" class="form-control">
-        {% else %}
-        <input type="text" name="last_payment" id="last_payment" value="" placeholder="2014-01-20" class="form-control">
-        {% endif %}
-        <p>This date is one month before the date their account expires as the database records the day the member last payed not when it expires.</p>
+        <label for="to_expire">To Expire</label>
+        <input type="text" name="to_expire" id="to_expire" value="{{ member.membership_expires.toISOString()|default('') }}" placeholder="2014-01-20" class="form-control">
     </div>
     <div class="form-group">
         <label for="name">Permission Level</label>
