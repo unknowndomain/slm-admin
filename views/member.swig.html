@@ -22,7 +22,7 @@
     </div>
     <div class="form-group">
         <label for="to_expire">To Expire</label>
-        <input type="text" name="to_expire" id="to_expire" value="{{ member.membership_expires.toISOString()|default('') }}" placeholder="2014-01-20" class="form-control">
+        <input type="text" name="to_expire" id="to_expire" value="{{ member.next_payment().toISOString()|default('') }}" placeholder="2014-01-20" class="form-control">
     </div>
     <div class="form-group">
         <label for="name">Permission Level</label>
