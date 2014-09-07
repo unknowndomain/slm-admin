@@ -22,11 +22,11 @@
             <td>{{ member.email }}</td>
             <td><pre>{{ member.address }}</pre></td>
             <td>{{ member.card_id|default('') }}</td>
-            <td><time datetime="{{ member.joined.toISOString() }}">{{ member.joined.toISOString() }}</time></td>
+            <td><time datetime="{{ event.joined.toISOString() }}">{{ event.joined|date("d M Y") }} {{ event.joined.toLocaleTimeString() }}</time></td>
             {% if member.last_payment %}
-            <td><time datetime="{{ member.last_payment.toISOString() }}">{{ member.last_payment.toISOString() }}</time></td>
-            {% else %}
-            <td>N/A</td>
+            <td><time datetime="{{ event.last_payment.toISOString() }}">{{ event.last_payment|date("d M Y") }} {{ event.last_payment.toLocaleTimeString() }}</time></td>
+			{% else %}
+            <td>&mdash;</td>
             {% endif %}
             {% if member.is_active() %}
             <td>Yes</td>
