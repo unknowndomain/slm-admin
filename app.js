@@ -89,6 +89,7 @@ module.exports = {
                             member.membership_expires = Date.parse(req.body.to_expire);
                         }
                         member.permission = parseInt(req.body.permission);
+                        member.minimum = parseFloat(req.body.minimum);
                         
                         member.isValid(function (valid) {
                             if (valid) {
