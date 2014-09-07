@@ -47,7 +47,12 @@
 {% block js %}
 <script>
 $(document).ready(function () {
-    $("#searchInput").on("input", function () {
+	$.extend($.expr[":"], {
+	"containsIN": function(elem, i, match, array) {
+	return (elem.textContent || elem.innerText || "").toLowerCase().indexOf((match[3] || "").toLowerCase()) >= 0;
+	}
+	});
+	$("#searchInput").on("input", function () {
         //split the current value of searchInput
         var data = this.value.split(" ");
         //create a jquery object of the rows
@@ -63,7 +68,7 @@ $(document).ready(function () {
         jo.filter(function (i, v) {
             var $t = $(this);
             for (var d = 0; d < data.length; ++d) {
-                if ($t.is(":contains('" + data[d] + "')")) {
+                if ($t.is(":containsIN('" + data[d] + "')")) {
                     return true;
                 }
             }
