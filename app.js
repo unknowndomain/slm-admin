@@ -38,12 +38,12 @@ module.exports = {
                     );
                 }
                 else {
-                    res.locals.flash("danger", "Not enough permissions.", "You do not have enough permissions for admin access.");
+                    res.locals.flash("danger", "Access Denied.", "You do not have permission to access this area.");
                     res.redirect("/admin");
                 }
             }
             else {
-                res.locals.flash("danger", "Not logged in.", "You cannot access the admin list when not logged in.");
+                res.locals.flash("danger", "Not logged in.", "You are not logged in.");
                 res.redirect("/admin");
             }
         });
@@ -64,12 +64,12 @@ module.exports = {
                     });
                 }
                 else {
-                    res.locals.flash("danger", "Not enough permissions.", "You do not have enough permissions for admin access.");
+                    res.locals.flash("danger", "Access Denied.", "You do not have permission to access this area.");
                     res.redirect("/");
                 }
             }
             else {
-                res.locals.flash("danger", "Not logged in.", "You cannot access the admin list when not logged in.");
+                res.locals.flash("danger", "Not logged in.", "You are not logged in.");
                 res.redirect("/");
             }
         });
@@ -89,6 +89,7 @@ module.exports = {
                             member.membership_expires = Date.parse(req.body.to_expire);
                         }
                         member.permission = parseInt(req.body.permission);
+                        member.minimum = parseFloat(req.body.minimum);
                         
                         member.isValid(function (valid) {
                             if (valid) {
@@ -118,4 +119,3 @@ module.exports = {
         return app;
     }
 }
-

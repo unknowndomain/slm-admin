@@ -29,9 +29,14 @@
         {% endif %}
     </div>
     <div class="form-group">
-        <label for="name">Permission Level</label>
+        <label for="permission">Permission Level</label>
         <p>The number represents how much access a user has. 0 is no permission. 50 is considered an admin.</p>
         <input type="number" name="permission" id="permission" value="{{ member.permission|default('0') }}" class="form-control">
+    </div>
+    <div class="form-group">
+        <label for="minimum">Minimum monthly membership</label>
+        <p>This allows you to override the minimum monthly membership from the global default on a per user basis. Leave blank for default</p>
+        <input type="number" name="minimum" id="minimum" value="{{ member.minimum }}" class="form-control">
     </div>
     <button>Update</button>
 </form>
