@@ -40,6 +40,18 @@
     </div>
     <button>Update</button>
 </form>
+<h3>Other Info</h3>
+<ul>
+    <li><b>gc_subscription</b>: {{ member.gc_subscription }}</li>
+    <li><b>gc_donation</b>: {{ member.gc_donation }}</li>
+    <li><b>last_payment</b>: {{ member.last_payment }}</li>
+    <li><b>membership_expires</b>: {{ member.membership_expires }}</li>
+    <li><b>joined</b>: {{ member.joined.toISOString() }}</li>
+    <li><b>last_accessed</b>: {{ member.last_accessed.toISOString() }}</li>
+    <li><b>last_updated</b>: {{ member.last_updated.toISOString() }}</li>
+    <li><b>approved</b>: {{ member.approved }}</li>
+    <li><b>disabled</b>: {{ member.disabled }}</li>
+</ul>
 <h3>Recent Transactions</h3>
 <table>
     <thead>
